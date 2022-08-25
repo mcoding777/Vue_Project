@@ -1,10 +1,18 @@
 <template>
+
+  <div class="black-bg" v-if="isOpenModal" v-on:click="handleModalChange">
+    <div class="white-bg">
+      <h4>상세페이지</h4>
+      <p>상세페이지 내용</p>
+    </div>
+  </div>
+
   <img alt="Vue logo" src="./assets/logo.png" />
   <div class="menu">
     <a v-for="(menu, index) in menus" :key="index">{{menu}}</a>
   </div>
   <h1>Vue 원룸</h1>
-  <div v-for="(product, index) in products" :key="index" class="room-div">
+  <div v-for="(product, index) in products" :key="index" class="room-div" v-on:click="handleModalChange">
     <img v-bind:src="require('./assets/' + product.img)" alt="원룸 이미지" class="room-img" />
     <h4>{{product.name}} 원룸</h4>
     <p>{{product.price}} 만원</p>
@@ -35,12 +43,19 @@ export default {
         img: 'room2.jpg',
       }],
       menus: ['Home', 'Products', 'About'],
+      isOpenModal: false,
     }
   },
   methods: {
     handleClick(index) {
       this.products[index].declaration++
-      console.log('더하기')
+    },
+    handleModalChange(event) {
+      if (event.path.some((item) => item.classList?.contains('room-div'))) {
+        this.isOpenModal = true
+      } else if (event.target.className === 'black-bg' ) {
+        this.isOpenModal = false
+      }
     },
   },
   components: {},
@@ -48,6 +63,30 @@ export default {
 </script>
 
 <style>
+body {
+  margin: 0;
+  padding: 0;
+}
+
+div {
+  box-sizing: border-box;
+}
+
+.black-bg {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  padding: 20px;
+}
+
+.white-bg {
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -69,13 +108,17 @@ export default {
 
 .room-div {
   margin-bottom: 80px;
+  background: rgba(112, 112, 112, 0.1);
+  padding: 50px 100px;
+  margin: 50px auto;
+  width: fit-content;
+  border-radius: 15px;
 }
 
 .room-img {
   width: 500px;
   height: 300px;
-  
-  margin-top: 50px;
+  display: block;
 }
 
 </style>
